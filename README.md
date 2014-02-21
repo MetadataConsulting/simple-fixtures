@@ -25,7 +25,7 @@ You can use `load(paths...)` method to load aditional fixutres if you need.
 Then in your tests create new `FixtureLoader` with given path and optional class loader to fixtures root, load fixtures you want and access them as properties of loader:
 
 ```
-FixturesLoader loader = new FixturesLoader("src/main/fixtures", getClass().getClassLoader())
+FixturesLoader loader = new FixturesLoader("src/main/fixtures")
 loader.load 'fixtureTwo'
 assert loader.fixtureTwo.name == "John Smith"
 ```

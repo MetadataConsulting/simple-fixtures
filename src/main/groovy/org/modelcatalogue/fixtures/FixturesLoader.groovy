@@ -15,7 +15,7 @@ class FixturesLoader {
 
     FixturesLoader(String fixturesDirectory) {
         this.fixturesDirectory = fixturesDirectory
-        this.classLoader = getClass().getClassLoader()
+        this.classLoader = Thread.currentThread().getContextClassLoader()
     }
 
     FixturesLoader(String fixturesDirectory, ClassLoader classLoader) {
