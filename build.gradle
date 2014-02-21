@@ -1,20 +1,16 @@
 apply plugin: 'groovy'
 
-group = "io.metadata"
-version = "0.1"
-description = "An awesome groovy library"
+group = 'org.modelcatalogue'
+version = '0.1'
+description = 'Simple Fixtures not only for Grails projects'
 
 repositories {
     jcenter()
 }
 
-sourceSets {
-    main.groovy.srcDir 'src'
-    test.groovy.srcDir 'test'
-}
-
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.2.1'
+    testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
     testCompile 'junit:junit:4.10'
 }
 
@@ -40,6 +36,14 @@ publishing {
     publications {
         groovyMaven(MavenPublication) {
             from components.java
+
+            artifact sourcesJar {
+                classifier "sources"
+            }
+
+            artifact javadocJar {
+                classifier "javadoc"
+            }
         }
     }
 }
@@ -47,22 +51,39 @@ publishing {
 // set bintrayUser & bintrayKey in gradle.properties
 bintray {
 
-    user = getPropertyOrUseDefault("bintrayUser", "fake_user")
-    key = getPropertyOrUseDefault("bintrayKey", "fake_key")
+    user = getPropertyOrUseDefault('bintrayUser', 'fake_user')
+    key = getPropertyOrUseDefault('bintrayKey', 'fake_key')
     publications = ['groovyMaven']
 
     def projectName = project.name
     def projectDescription = project.description
 
     pkg {
-        repo = 'maven' // or your repo name
+        repo = 'model-catalogue' // or your repo name
+        userOrg = 'metadata'
         name = projectName      // somehow project.* doesn't work in this closure
         desc = projectDescription
-        licenses = ['Apache-2.0']
+        licenses = ['MIT']
     }
-    dryRun = true // whether to run this as dry-run, without deploying
+    // dryRun = true // whether to run this as dry-run, without deploying
 }
 
 String getPropertyOrUseDefault(String propertyName, String defaultValue) {
     hasProperty(propertyName) ? getProperty(propertyName) : defaultValue
+}
+
+// custom tasks for creating source/javadoc jars
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+// add javadoc/source jar tasks as artifacts
+artifacts {
+    archives sourcesJar, javadocJar
 }
