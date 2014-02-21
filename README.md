@@ -3,7 +3,7 @@ Simple Fixtures
 
 Simple test data not only for Grails project.
 
-This is leightweight version of [Grails Fixtures Plugin](grails.org/plugin/fixtures) but this one can easily run in unit tests not only the integration tests.
+This is leightweight version of [Grails Fixtures Plugin](http://grails.org/plugin/fixtures) but this one can easily run in unit tests not only the integration tests.
 
 Create Groovy scripts in some folder in your project such as `src/test/fixtures`. Define your fixtures in `fixture` as follows:
 
