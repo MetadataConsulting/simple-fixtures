@@ -1,34 +1,31 @@
-Groovy Library Project Template
+Simple Fixtures
 -------------------------------
 
-You have just created a Groovy library project. This project can be built using Gradle.
+Simple test data not only for Grails project.
 
-What all has been already taken care for you:
+This is leightweight version of [Grails Fixtures Plugin](grails.org/plugin/fixtures) but this one can easily run in unit tests not only the integration tests.
 
-* A boilerplate `build.gradle`
-* Simpler directory structure
-* Gradle wrapper included - No gradle installation required and great for CI servers too
-* Travis CI integration ready (a smart `.travis.yml` included)
-* Bintray maven publish integration for your library (.jar)
-* Comprehensive `.gitignore` - so that unnecessary files don't get checked in
-* Uses jcenter (faster) maven repo
-
-You project looks like :
+Create Groovy scripts in some folder in your project such as `src/test/fixtures`. Define your fixtures in `fixture` as follows:
 
 ```
-  project/
-    |--+ src/            (put your groovy source files here)
-    |--+ test/           (groovy test files go here)
-    |--+ build.gradle    (build script)
-    |--+ .gitignore      (common patterns already included)
-    |--+ .travis.yml     (travis configuration for continuous integration of your library)
-    |--+ gradle/         (don't worry about it)
-    |--+ gradlew         (on *nix run commands using ./gradlew <command>)
-    |--+ gradlew.bat     (on win run commands using gradlew.bat <command>)
+// src/test/fixtures/fixtureTwo.groovy
+import com.exaple.MyPogo
+
+load "path/to/fixtureOne" // loads other fixture such as fixtureOne
+
+fixture {
+    fixtureTwo(MyPogo, name: "John Smith", nickname: "Fixture", something: fixtureOne)
+}
 ```
 
+The name of the method denotes the name of the fixture, the first argument is the class of the fixture followed by the arguments for the map constructor.
 
-Notes:
+You can use `load(paths...)` method to load aditional fixutres if you need.
 
-* A simpler directory structure is suitable for a library where you don't have webapp/resources etc.
-* When you need to publish your library to Bintray, set bintrayUser & bintrayKey in gradle.properties
+Then in your tests create new `FixtureLoader` with given path to fixtures root, load fixtures you want and access them as properties of loader:
+
+```
+FixturesLoader loader = new FixturesLoader("src/main/fixtures")
+loader.load 'fixtureTwo'
+assert loader.fixtureTwo.name == "John Smith"
+```
