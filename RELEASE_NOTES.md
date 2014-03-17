@@ -1,6 +1,9 @@
 Release Notes
 -------------------------------
 ### 0.1.2
+Added ability to load all fixtures in particular directory
+
+### 0.1.2
 Set default class loader to current thread's context class loader
 
 ### 0.1.1

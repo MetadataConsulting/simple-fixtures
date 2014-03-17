@@ -30,16 +30,32 @@ class FixturesLoader {
         GroovyShell shell = new GroovyShell(classLoader, new Binding(), compilerConfiguration)
 
         for (String fixture in fixturesPaths) {
-            File fixtureFile = new File("${fixturesDirectory}/${fixture}.groovy")
-            if (!fixtureFile.exists()) {
-                throw new IllegalArgumentException("Fixture file $fixtureFile.canonicalPath does not exist!")
+            if (fixture.endsWith('*')) {
+                File fixturesDir = new File("${fixturesDirectory}/${fixture[0..-2]}")
+                if (fixturesDir.exists() && fixturesDir.isDirectory()) {
+                    fixturesDir.eachFile {
+                        if (!it.isDirectory() && it.name.endsWith('.groovy')) {
+                            loadFixuresFromFile(it, shell)
+                        }
+                    }
+                } else {
+                    throw new IllegalArgumentException("Directory $fixturesDir.path does not exist")
+                }
+            } else {
+                loadFixuresFromFile(new File("${fixturesDirectory}/${fixture}.groovy"), shell)
             }
-            FixturesLoaderScript script = shell.parse(fixtureFile)
-            script.setLoader this
-            script.run()
-            fixtures.putAll(script.fixtures)
         }
         fixtures
+    }
+
+    protected loadFixuresFromFile(File fixtureFile, GroovyShell shell) {
+        if (!fixtureFile.exists()) {
+            throw new IllegalArgumentException("Fixture file $fixtureFile.canonicalPath does not exist!")
+        }
+        FixturesLoaderScript script = shell.parse(fixtureFile)
+        script.setLoader this
+        script.run()
+        fixtures.putAll(script.fixtures)
     }
 
     def propertyMissing(String name) { fixtures[name] }

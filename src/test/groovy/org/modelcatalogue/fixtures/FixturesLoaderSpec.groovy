@@ -18,4 +18,18 @@ class FixturesLoaderSpec extends Specification {
         fixturesLoader.DT_string.name == 'string'
     }
 
+
+    def "mock fixtures loader loads fixture from directory"() {
+        FixturesLoader fixturesLoader = new FixturesLoader("src/test/resources/fixtures")
+
+        when:
+        fixturesLoader.load("dataTypes/*")
+
+        then:
+        fixturesLoader.DT_double
+        fixturesLoader.DT_double.name == 'double'
+        fixturesLoader.DT_string
+        fixturesLoader.DT_string.name == 'string'
+    }
+
 }
