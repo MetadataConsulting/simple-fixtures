@@ -3,7 +3,7 @@ Simple Fixtures
 
 Simple test data not only for Grails project.
 
-This is lightweight version of [Grails Fixtures Plugin](grails.org/plugin/fixtures) but this one can easily run in unit tests not only the integration tests.
+This is lightweight version of [Grails Fixtures Plugin](http://grails.org/plugin/fixtures) but this one can easily run in unit tests not only the integration tests.
 
 Create Groovy scripts in some folder in your project such as `src/test/fixtures`. Define your fixtures in `fixture` as follows:
 
@@ -11,8 +11,7 @@ Create Groovy scripts in some folder in your project such as `src/test/fixtures`
 // src/test/fixtures/fixtureTwo.groovy
 import com.exaple.MyPogo
 
-load "path/to/fixtureOne"      // loads other fixture such as fixtureOne
-load "path/to/otherFixtures/*" // loads all fixtures in directory otherOnes (non-recursively)
+load "path/to/fixtureOne" // loads other fixture such as fixtureOne
 
 fixture {
     fixtureTwo(MyPogo, name: "John Smith", nickname: "Fixture", something: fixtureOne)
